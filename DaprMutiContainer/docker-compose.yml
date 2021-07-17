@@ -12,7 +12,6 @@ services:
       dockerfile: DaprBackEnd/Dockerfile
     depends_on:
       - redis
-      - placement
     networks:
       - dapr-network
 
@@ -21,7 +20,6 @@ services:
     command: ["./daprd",
      "-app-id", "daprbackend",
      "-app-port", "80",
-     "-placement-host-address", "placement:50006",
      "-components-path", "/components"]
     volumes:
       - "./dapr/components/:/components"
@@ -39,7 +37,6 @@ services:
       dockerfile: BlazorServerApp/Dockerfile
     depends_on:
       - redis
-      - placement
     networks:
       - dapr-network
 
@@ -47,7 +44,6 @@ services:
     image: "daprio/daprd:latest"
     command: ["./daprd",
     "-app-id", "blazorserverapp",
-    "-placement-host-address", "placement:50006",
      "-components-path", "/components"]
     volumes:
       - "./dapr/components/:/components"
@@ -55,16 +51,13 @@ services:
       - blazorserverapp
     network_mode: "service:blazorserverapp"
 
-  ############################
-  # Dapr placement service
-  ############################
-  placement:
-    image: "daprio/dapr"
-    command: ["./placement", "-port", "50006"]
-    ports:
-      - "50006:50006"
-    networks:
-      - dapr-network
+  #dashboard:
+  # image: dapr_dashboard_cp:latest
+  # container_name: dashboard
+  # ports:
+  #  - "8080:8080"
+  # networks:
+  #  - dapr-network
 
   ############################
   # Redis state store
