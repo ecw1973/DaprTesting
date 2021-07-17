@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+
+  daprbackend:
+    image: ${DOCKER_REGISTRY-}daprbackend
+    build:
+      context: .
+      dockerfile: DaprBackEnd/Dockerfile
+    #ports:
+    #  - "52000:50001"
+
+  daprbackend-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", "-app-id", "daprbackend", "-app-port", "80" ]
+    depends_on:
+      - daprbackend
+    network_mode: "service:daprbackend"
+
+
+  blazorserverapp:
+    image: ${DOCKER_REGISTRY-}blazorserverapp
+    build:
+      context: .
+      dockerfile: BlazorServerApp/Dockerfile
+    #ports:
+    #  - "53000:50001"
+
+  blazorserverapp-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", "-app-id", "blazorserverapp", "-app-port", "80" ]
+    depends_on:
+      - blazorserverapp
+    network_mode: "service:blazorserverapp"
