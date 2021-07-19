@@ -1,42 +1,52 @@
+apiVersion: apps/v1
 kind: Service
-apiVersion: v1
 metadata:
-  name: nodeapp
+  name: daprbackend-api
+  namespace: dapr-system
   labels:
-    app: node
+    app: dbe
+    service: daprbackend
 spec:
-  selector:
-    app: node
+  type: NodePort
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 3000
-  type: LoadBalancer
+    - port: 80
+      targetPort: 80
+      nodePort: 30005
+      protocol: TCP
+      name: http
+  selector:
+    service: daprbackend
 
 ---
-apiVersion: apps/v1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
-  name: nodeapp
+  name: daprbackend
+  namespace: dapr-system
   labels:
-    app: node
+    app: dbe
+    service: daprbackend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: node
+      service: daprbackend
   template:
     metadata:
       labels:
-        app: node
+        app: dbe
+        service: daprbackend
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "nodeapp"
-        dapr.io/app-port: "3000"
+        dapr.io/app-id: "daprbackend-api"
+        dapr.io/app-port: "80"
+      #  dapr.io/config: "dapr-config"
     spec:
       containers:
-      - name: node
-        image: dapriosamples/hello-k8s-node:latest
-        ports:
-        - containerPort: 3000
-        imagePullPolicy: Always
+        - name: daprbackend-api
+          image: daprbackend:latest
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP

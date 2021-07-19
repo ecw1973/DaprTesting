@@ -7,6 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DaprBackEnd", "DaprBackEnd\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerApp", "BlazorServerApp\BlazorServerApp.csproj", "{8AE4B00A-8BEF-4E06-B811-609A71BB7BA4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{E4B05605-F83D-4349-961B-8A30C87BD6CD}"
+	ProjectSection(SolutionItems) = preProject
+		deploy\App.yaml = deploy\App.yaml
+		deploy\Redis.yaml = deploy\Redis.yaml
+		deploy\Service.yaml = deploy\Service.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
