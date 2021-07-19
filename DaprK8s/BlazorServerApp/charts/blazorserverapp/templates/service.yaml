@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "blazorserverapp.fullname" . }}
+  labels:
+    app: {{ template "blazorserverapp.name" . }}
+    chart: {{ template "blazorserverapp.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "blazorserverapp.name" . }}
+    release: {{ .Release.Name }}
