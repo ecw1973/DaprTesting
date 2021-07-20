@@ -2,13 +2,19 @@ version: '3.4'
 
 services:
 
-  daprbackend:
+  serviceone:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "80"
 
-  blazorserverapp:
+  #service-two:
+  #  environment:
+  #    - ASPNETCORE_ENVIRONMENT=Development
+  #  ports:
+  #    - "80"
+
+  blazor-app:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:

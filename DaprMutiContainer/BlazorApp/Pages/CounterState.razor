@@ -1,0 +1,32 @@
+﻿@page "/counterstate"
+@using Dapr.Client
+@using Dapr
+@using BlazorApp.Events
+@inject DaprClient daprClient
+
+<h1>Counter With Dapr State</h1>
+
+<p>Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementAndSaveCount">Click me</button>
+
+@code 
+{
+
+    const string storeName = "statestore";
+    const string key = "counter";
+    private int currentCount = 0;
+
+    private async Task IncrementAndSaveCount()
+    {
+        int oldCount = currentCount;
+        currentCount++;
+
+        await daprClient.SaveStateAsync(storeName, key, currentCount);
+        Console.WriteLine("Saved Count");
+
+        CounterChangedEvent ccEvent = new CounterChangedEvent() { NewValue = currentCount, OldValue = oldCount};
+        await daprClient.PublishEventAsync<CounterChangedEvent>("pubsub", "counterEvents", ccEvent);
+        Console.WriteLine("Published Event");
+    }
+}

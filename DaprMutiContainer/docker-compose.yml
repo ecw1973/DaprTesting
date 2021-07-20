@@ -1,26 +1,29 @@
 version: '3.4'
 
+networks:
+    dapr-network:
+
 services:
 
   ############################
-  # Service + Dapr sidecar
+  # ServiceOne + Dapr sidecar
   ############################
-  daprbackend:
-    image: ${DOCKER_REGISTRY-}daprbackend
+  serviceone:
+    image: ${DOCKER_REGISTRY-}serviceone
     build:
       context: .
-      dockerfile: DaprBackEnd/Dockerfile
+      dockerfile: ServiceOne/Dockerfile
     depends_on:
       - redis
       - rabbitmq
     networks:
       - dapr-network
 
-  daprbackend-dapr:
+  serviceone-dapr:
     image: "daprio/daprd:latest"
-    container_name: DaprBackendSideCar
+    container_name: ServiceOneSideCar
     command: ["./daprd",
-     "-app-id", "daprbackend",
+     "-app-id", "serviceone",
      "-app-port", "80",
      "-config", "/config/config.yaml",
      "-components-path", "/components"]
@@ -28,28 +31,57 @@ services:
       - "./dapr:/config"
       - "./dapr/components/:/components"
     depends_on:
-      - daprbackend
-    network_mode: "service:daprbackend"
+      - serviceone
+    network_mode: "service:serviceone"
+
+  ############################
+  # ServiceTwo + Dapr sidecar
+  ############################
+  #service-two:
+  #  image: ${DOCKER_REGISTRY-}service-two
+  #  build:
+  #    context: .
+  #    dockerfile: ServiceTwo/Dockerfile
+  #  depends_on:
+  #    - redis
+  #    - rabbitmq
+  #  networks:
+  #    - dapr-network
+
+  #service-two-dapr:
+  #  image: "daprio/daprd:latest"
+  #  container_name: ServiceTwoSideCar
+  #  command: ["./daprd",
+  #   "-app-id", "service-two",
+  #   "-app-port", "80",
+  #   "-config", "/config/config.yaml",
+  #   "-components-path", "/components"]
+  #  volumes:
+  #    - "./dapr:/config"
+  #    - "./dapr/components/:/components"
+  #  depends_on:
+  #    - service-two
+  #  network_mode: "service:service-two"
 
   ############################
   # Blazor + Dapr sidecar
   ############################
-  blazorserverapp:
-    image: ${DOCKER_REGISTRY-}blazorserverapp
+  blazor-app:
+    image: ${DOCKER_REGISTRY-}blazor-app
     build:
       context: .
-      dockerfile: BlazorServerApp/Dockerfile
+      dockerfile: BlazorApp/Dockerfile
     depends_on:
       - redis
       - rabbitmq
     networks:
       - dapr-network
 
-  blazorserverapp-dapr:
+  blazor-app-dapr:
     image: "daprio/daprd:latest"
-    container_name: BlazorServerAppSideCar
+    container_name: BlazorAppSideCar
     command: ["./daprd",
-     "-app-id", "blazorserverapp",
+     "-app-id", "blazor-app",
      "-app-port", "80",
      "-config", "/config/config.yaml",
      "-components-path", "/components"]
@@ -57,8 +89,8 @@ services:
       - "./dapr:/config"
       - "./dapr/components/:/components"
     depends_on:
-      - blazorserverapp
-    network_mode: "service:blazorserverapp"
+      - blazor-app
+    network_mode: "service:blazor-app"
 
   #dashboard:
   # image: "daprio/dashboard:latest"
@@ -97,6 +129,3 @@ services:
       - "5672:5672"
     networks:
       - dapr-network
-
-networks:
-    dapr-network:

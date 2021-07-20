@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DaprBackEnd", "DaprBackEnd\DaprBackEnd.csproj", "{73CDFC59-BC5F-44CD-A0AC-0CF0B0141EC7}"
-EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{5BADE7A3-E09E-49CD-A999-0C97AC51F8A7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerApp", "BlazorServerApp\BlazorServerApp.csproj", "{8AE4B00A-8BEF-4E06-B811-609A71BB7BA4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CED9BE31-E519-4323-8B7C-68AE8CDBF953}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,24 +12,34 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		dapr\components\statestore.yaml = dapr\components\statestore.yaml
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceTwo", "ServiceTwo\ServiceTwo.csproj", "{361A85BE-362C-4ED7-AF69-06D8F761A363}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceOne", "ServiceOne\ServiceOne.csproj", "{CBD25722-A179-4BB6-8409-1B5CF740A658}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp", "BlazorApp\BlazorApp.csproj", "{1C577E96-BB86-4E42-B2B9-D4DB034DFBB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{73CDFC59-BC5F-44CD-A0AC-0CF0B0141EC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73CDFC59-BC5F-44CD-A0AC-0CF0B0141EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73CDFC59-BC5F-44CD-A0AC-0CF0B0141EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73CDFC59-BC5F-44CD-A0AC-0CF0B0141EC7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5BADE7A3-E09E-49CD-A999-0C97AC51F8A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5BADE7A3-E09E-49CD-A999-0C97AC51F8A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BADE7A3-E09E-49CD-A999-0C97AC51F8A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BADE7A3-E09E-49CD-A999-0C97AC51F8A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8AE4B00A-8BEF-4E06-B811-609A71BB7BA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8AE4B00A-8BEF-4E06-B811-609A71BB7BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8AE4B00A-8BEF-4E06-B811-609A71BB7BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8AE4B00A-8BEF-4E06-B811-609A71BB7BA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{361A85BE-362C-4ED7-AF69-06D8F761A363}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{361A85BE-362C-4ED7-AF69-06D8F761A363}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{361A85BE-362C-4ED7-AF69-06D8F761A363}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{361A85BE-362C-4ED7-AF69-06D8F761A363}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBD25722-A179-4BB6-8409-1B5CF740A658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBD25722-A179-4BB6-8409-1B5CF740A658}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBD25722-A179-4BB6-8409-1B5CF740A658}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBD25722-A179-4BB6-8409-1B5CF740A658}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C577E96-BB86-4E42-B2B9-D4DB034DFBB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C577E96-BB86-4E42-B2B9-D4DB034DFBB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C577E96-BB86-4E42-B2B9-D4DB034DFBB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C577E96-BB86-4E42-B2B9-D4DB034DFBB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
