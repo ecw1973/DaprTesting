@@ -59,6 +59,6 @@ else
 
     private async Task CallService()
     {
-        forecasts = await daprClient.InvokeMethodAsync<IEnumerable<WeatherForecast>>(HttpMethod.Get, "serviceone", "weatherforecast");
+        forecasts = await daprClient.InvokeMethodAsync<IEnumerable<WeatherForecast>>(HttpMethod.Get, "service-one", "serviceone");
     }
 }
