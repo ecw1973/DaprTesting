@@ -1,5 +1,6 @@
 ﻿@page "/counterstate"
 @using Dapr.Client
+@using BlazorServerApp.Events
 @inject DaprClient daprClient
 
 <h1>Counter With Dapr State</h1>
@@ -17,14 +18,14 @@
 
     private async Task IncrementAndSaveCount()
     {
+        int oldCount = currentCount;
         currentCount++;
 
         await daprClient.SaveStateAsync(storeName, key, currentCount);
-    }
+        Console.WriteLine("Saved Count");
 
-    protected override async Task OnInitializedAsync()
-    {
-        currentCount = await daprClient.GetStateAsync<int>(storeName, key);
+        CounterChangedEvent ccEvent = new CounterChangedEvent() { NewValue = currentCount, OldValue = oldCount};
+        await daprClient.PublishEventAsync<CounterChangedEvent>("pubsub", "counterEvents", ccEvent);
+        Console.WriteLine("Published Event");
     }
-
 }

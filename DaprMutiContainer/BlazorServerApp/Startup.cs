@@ -47,10 +47,13 @@ namespace BlazorServerApp
 
             app.UseRouting();
 
+            app.UseCloudEvents();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapSubscribeHandler();
             });
         }
     }

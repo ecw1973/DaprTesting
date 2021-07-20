@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Dapr;
+using Dapr.Client;
+using DaprBackEnd.Events;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -16,15 +20,23 @@ namespace DaprBackEnd.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private DaprClient daprClient;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, DaprClient daprClient)
         {
             _logger = logger;
+            this.daprClient = daprClient;
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            CounterChangedEvent ccEvent = new CounterChangedEvent() { NewValue = 5, OldValue = 4};
+            Task result = daprClient.PublishEventAsync<CounterChangedEvent>("pubsub", "counterEvents", ccEvent);
+            result.Wait(5000);
+            bool completed = result.IsCompleted;
+            Console.WriteLine("Published Event");
+
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
                 {
@@ -33,6 +45,15 @@ namespace DaprBackEnd.Controllers
                     Summary = Summaries[rng.Next(Summaries.Length)]
                 })
                 .ToArray();
+        }
+
+        [Topic("pubsub", "counterEvents")]
+        [HttpPost]
+        public async Task<IActionResult> Subscriber(CounterChangedEvent ccEvent)
+        {
+            // Deserialize incoming order summary
+            _logger.LogInformation("Received Event: {@CounterChangedEvent}", ccEvent);
+            return Ok();
         }
     }
 }
