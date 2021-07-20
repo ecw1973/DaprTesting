@@ -54,6 +54,7 @@ namespace BlazorServerApp
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
                 endpoints.MapSubscribeHandler();
+                endpoints.MapControllers();
             });
         }
     }

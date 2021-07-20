@@ -29,13 +29,10 @@ namespace DaprBackEnd.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<IEnumerable<WeatherForecast>> Get()
         {
             CounterChangedEvent ccEvent = new CounterChangedEvent() { NewValue = 5, OldValue = 4};
-            Task result = daprClient.PublishEventAsync<CounterChangedEvent>("pubsub", "counterEvents", ccEvent);
-            result.Wait(5000);
-            bool completed = result.IsCompleted;
-            Console.WriteLine("Published Event");
+            await daprClient.PublishEventAsync<CounterChangedEvent>("pubsub", "counterEvents", ccEvent);
 
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

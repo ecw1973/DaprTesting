@@ -50,6 +50,7 @@ services:
     container_name: BlazorServerAppSideCar
     command: ["./daprd",
      "-app-id", "blazorserverapp",
+     "-app-port", "80",
      "-config", "/config/config.yaml",
      "-components-path", "/components"]
     volumes:
