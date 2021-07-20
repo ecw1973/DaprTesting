@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: daprbackend-deployment
+  namespace: eds-test
+spec:
+  selector:
+    matchLabels:
+      app: daprbackend
+      version: v1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: daprbackend
+        version: v1
+    spec:
+      containers:
+      - name: daprbackend-container
+        image: daprbackend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+---
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: daprbackend-deploy
+#  namespace: eds-test
+#  labels:
+#    app: dbe
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: dbe
+#  template:
+#    metadata:
+#      labels:
+#        app: dbe
+#      #annotations:
+#      #  dapr.io/enabled: "true"
+#      #  dapr.io/app-id: "daprbackend"
+#      #  dapr.io/app-port: "3000"
+#    spec:
+#      containers:
+#      - name: dbe
+#        image: daprbackend:latest
+#        imagePullPolicy: Never
+#        ports:
+#        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: daprbackend-service
+  namespace: eds-test
+spec:
+  type: LoadBalancer
+  selector:
+    app: daprbackend
+  ports:
+  - protocol: TCP
+    port: 8888
+    targetPort: 80
