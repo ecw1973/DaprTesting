@@ -1,6 +1,5 @@
 ﻿@page "/counterstate"
 @using Dapr.Client
-@using Dapr
 @using BlazorApp.Events
 @inject DaprClient daprClient
 
@@ -8,25 +7,57 @@
 
 <p>Current count: @currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementAndSaveCount">Click me</button>
+<br />
+<button class="btn btn-primary" @onclick="IncrementAndSaveCount">Increment</button>
+<br />
+<button class="btn btn-primary" @onclick="DecrementAndSaveCount">Decrement</button>
+<br />
+<button class="btn btn-primary" @onclick="ResetAndSaveCount">Reset</button>
+<br/>
 
-@code 
+@code
 {
+    private int currentCount;
 
-    const string storeName = "statestore";
-    const string key = "counter";
-    private int currentCount = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        currentCount = await daprClient.GetStateAsync<int>("statestore", "counter");
+    }
 
     private async Task IncrementAndSaveCount()
     {
-        int oldCount = currentCount;
+        var oldCount = currentCount;
         currentCount++;
 
-        await daprClient.SaveStateAsync(storeName, key, currentCount);
-        Console.WriteLine("Saved Count");
-
-        CounterChangedEvent ccEvent = new CounterChangedEvent() { NewValue = currentCount, OldValue = oldCount};
-        await daprClient.PublishEventAsync<CounterChangedEvent>("pubsub", "counterEvents", ccEvent);
-        Console.WriteLine("Published Event");
+        await SaveAndPublish(new CounterChangedEvent { NewValue = currentCount, OldValue = oldCount });
     }
+
+    private async Task DecrementAndSaveCount()
+    {
+        var oldCount = currentCount;
+        currentCount--;
+
+        await SaveAndPublish(new CounterChangedEvent { NewValue = currentCount, OldValue = oldCount });
+    }
+
+    private async Task ResetAndSaveCount()
+    {
+        var oldCount = currentCount;
+        currentCount = 0;
+
+        await SaveAndPublish(new CounterResetEvent() { NewValue = currentCount, OldValue = oldCount });
+    }
+
+    private async Task SaveAndPublish<T>(T theEventData) where T : ICounterChangedEvent
+    {
+        // Dapr State Store Call.
+        // @see DaprTesting\DaprMutiContainer\dapr\components\stateStore.yaml
+        await daprClient.SaveStateAsync("statestore", "counter", theEventData.NewValue);
+
+        // Dapr Publish Event Call.
+        // @see DaprTesting\DaprMutiContainer\dapr\components\pubsub.yaml
+        await daprClient.PublishEventAsync("pubsub", theEventData.GetType().Name, theEventData);
+    }
+
+
 }

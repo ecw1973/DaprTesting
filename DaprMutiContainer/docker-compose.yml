@@ -37,31 +37,31 @@ services:
   ############################
   # ServiceTwo + Dapr sidecar
   ############################
-  service-two:
-    image: ${DOCKER_REGISTRY-}service-two
-    build:
-      context: .
-      dockerfile: ServiceTwo/Dockerfile
-    depends_on:
-      - redis
-      - rabbitmq
-    networks:
-      - dapr-network
+  #service-two:
+  #  image: ${DOCKER_REGISTRY-}service-two
+  #  build:
+  #    context: .
+  #    dockerfile: ServiceTwo/Dockerfile
+  #  depends_on:
+  #    - redis
+  #    - rabbitmq
+  #  networks:
+  #    - dapr-network
 
-  service-two-dapr:
-    image: "daprio/daprd:latest"
-    container_name: ServiceTwoSideCar
-    command: ["./daprd",
-     "-app-id", "service-two",
-     "-app-port", "80",
-     "-config", "/config/config.yaml",
-     "-components-path", "/components"]
-    volumes:
-      - "./dapr:/config"
-      - "./dapr/components/:/components"
-    depends_on:
-      - service-two
-    network_mode: "service:service-two"
+  #service-two-dapr:
+  #  image: "daprio/daprd:latest"
+  #  container_name: ServiceTwoSideCar
+  #  command: ["./daprd",
+  #   "-app-id", "service-two",
+  #   "-app-port", "80",
+  #   "-config", "/config/config.yaml",
+  #   "-components-path", "/components"]
+  #  volumes:
+  #    - "./dapr:/config"
+  #    - "./dapr/components/:/components"
+  #  depends_on:
+  #    - service-two
+  #  network_mode: "service:service-two"
 
   ############################
   # Blazor + Dapr sidecar
