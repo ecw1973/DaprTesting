@@ -8,11 +8,11 @@ services:
     ports:
       - "80"
 
-  #service-two:
-  #  environment:
-  #    - ASPNETCORE_ENVIRONMENT=Development
-  #  ports:
-  #    - "80"
+  service-two:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
 
   blazor-app:
     environment:

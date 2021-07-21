@@ -3,25 +3,41 @@
 @using BlazorApp.Events
 @inject DaprClient daprClient
 
+<style>
+    .buttonBox 
+    {
+        padding: 1.5rem;
+        margin-right: 0;
+        margin-left: 0;
+        border-width: .2rem;
+    }
+</style>
+
 <h1>Counter With Dapr State</h1>
 
-<p>Current count: @currentCount</p>
-
-<br />
-<button class="btn btn-primary" @onclick="IncrementAndSaveCount">Increment</button>
-<br />
-<button class="btn btn-primary" @onclick="DecrementAndSaveCount">Decrement</button>
-<br />
-<button class="btn btn-primary" @onclick="ResetAndSaveCount">Reset</button>
 <br/>
+
+<div class=".buttonBox">
+    <button class="btn btn-primary" @onclick="IncrementAndSaveCount">Increment</button>
+    <button class="btn btn-info" @onclick="DecrementAndSaveCount">Decrement</button>
+    <button class="btn btn-danger" @onclick="ResetAndSaveCount">Reset</button>
+</div>
+
+<br/>
+
+<p>Current count: @currentCount</p>
 
 @code
 {
     private int currentCount;
+    private const string DaprPubSubName = "pubsub";
+    private const string DaprStateStoreName = "statestore";
 
     protected override async Task OnInitializedAsync()
     {
-        currentCount = await daprClient.GetStateAsync<int>("statestore", "counter");
+        // Dapr State Retrieve Call.
+        // @see DaprTesting\DaprMutiContainer\dapr\components\stateStore.yaml
+        currentCount = await daprClient.GetStateAsync<int>(DaprStateStoreName, "counter");
     }
 
     private async Task IncrementAndSaveCount()
@@ -52,11 +68,11 @@
     {
         // Dapr State Store Call.
         // @see DaprTesting\DaprMutiContainer\dapr\components\stateStore.yaml
-        await daprClient.SaveStateAsync("statestore", "counter", theEventData.NewValue);
+        await daprClient.SaveStateAsync(DaprStateStoreName, "counter", theEventData.NewValue);
 
         // Dapr Publish Event Call.
         // @see DaprTesting\DaprMutiContainer\dapr\components\pubsub.yaml
-        await daprClient.PublishEventAsync("pubsub", theEventData.GetType().Name, theEventData);
+        await daprClient.PublishEventAsync(DaprPubSubName, theEventData.GetType().Name, theEventData);
     }
 
 
